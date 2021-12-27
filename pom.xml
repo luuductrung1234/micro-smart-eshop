@@ -17,9 +17,15 @@
 
     <properties>
         <java.version>11</java.version>
+        <jib.version>3.1.4</jib.version>
         <frontend-maven-plugin.version>1.11.2</frontend-maven-plugin.version>
         <target.node.version>v16.10.0</target.node.version>
         <target.npm.version>7.24.0</target.npm.version>
+
+        <image.registry.account.id>docker.io/luuductrung1234</image.registry.account.id>
+        <image.name>fullstack-demo</image.name>
+        <image.tag/> <!-- this property will be imputed later in commandline -D -->
+        <image.dependency.jdk>adoptopenjdk:11-jre@sha256:ad6431b2e2a6f8016aa6d79c3f588783af9fdc06cafe131fd0d3faf560914b13</image.dependency.jdk>
 
         <frontend.directory>${basedir}/src/frontend</frontend.directory>
         <input.frontend.directory>${basedir}/src/frontend/build</input.frontend.directory>
@@ -57,10 +63,153 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.version}</version>
+                <configuration>
+                    <from>
+                        <image>
+                            ${image.dependency.jdk}
+                        </image>
+                    </from>
+                    <to>
+                        <image>${image.registry.account.id}/${image.name}:${image.tag}</image>
+                    </to>
+                    <container>
+                        <ports>
+                            <port>8080</port>
+                        </ports>
+                        <format>OCI</format>
+                    </container>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
+        <!-- ======================================================
+        Package project and publish to local daemon
+        ======================================================= -->
+        <profile>
+            <id>push-to-docker</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-maven-plugin</artifactId>
+                        <version>${jib.version}</version>
+                        <configuration>
+                            <from>
+                                <image>
+                                    ${image.dependency.jdk}
+                                </image>
+                            </from>
+                            <!--<to>-->
+                            <!--    <image>${image.registry.account.id}/${image.name}:${image.tag}</image>-->
+                            <!--</to>-->
+                            <container>
+                                <ports>
+                                    <port>8080</port>
+                                </ports>
+                                <format>OCI</format>
+                            </container>
+                        </configuration>
+                        <!-- bind to maven lifecycle -->
+                        <executions>
+                            <execution>
+                                <id>publish-current-tag</id>
+                                <goals>
+                                    <goal>dockerBuild</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <to>
+                                        <image>${image.name}:${image.tag}</image>
+                                    </to>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>publish-latest-tag</id>
+                                <goals>
+                                    <goal>dockerBuild</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <to>
+                                        <image>${image.name}:latest</image>
+                                    </to>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- ======================================================
+        Package project and publish to image Registry
+        ======================================================= -->
+        <profile>
+            <id>push-to-registry</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-maven-plugin</artifactId>
+                        <version>${jib.version}</version>
+                        <configuration>
+                            <from>
+                                <image>
+                                    ${image.dependency.jdk}
+                                </image>
+                            </from>
+                            <!--<to>-->
+                            <!--    <image>${image.registry.account.id}/${image.name}:${image.tag}</image>-->
+                            <!--</to>-->
+                            <container>
+                                <ports>
+                                    <port>8080</port>
+                                </ports>
+                                <format>OCI</format>
+                            </container>
+                        </configuration>
+                        <!-- bind to maven lifecycle -->
+                        <executions>
+                            <execution>
+                                <id>publish-current-tag</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <to>
+                                        <image>${image.registry.account.id}/${image.name}:${image.tag}</image>
+                                    </to>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>publish-latest-tag</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <to>
+                                        <image>${image.registry.account.id}/${image.name}:latest</image>
+                                    </to>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <!-- ======================================================
         Build frontend app and copy to target/
         ======================================================= -->
