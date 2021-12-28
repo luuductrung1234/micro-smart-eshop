@@ -1,0 +1,12 @@
+version: "3.8"
+# documentation
+# https://docs.docker.com/compose/
+# versions reference
+# https://docs.docker.com/compose/compose-file/compose-file-v3/
+
+services:
+  backend:
+    image: "luuductrung1234/fullstack-demo:latest"
+    ports:
+      - "80:8080"
+    restart: "always"
