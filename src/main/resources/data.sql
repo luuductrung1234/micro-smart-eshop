@@ -998,3 +998,5 @@ insert into student (id, name, email, gender) values (997, 'Tommy Gurr', 'tgurrr
 insert into student (id, name, email, gender) values (998, 'Lora Janik', 'ljanikrp@ox.ac.uk', 'MALE');
 insert into student (id, name, email, gender) values (999, 'Courtney Farrington', 'cfarringtonrq@vimeo.com', 'FEMALE');
 insert into student (id, name, email, gender) values (1000, 'Delmore Blindermann', 'dblindermannrr@booking.com', 'MALE');
+
+SELECT setval('student_sequence', 1000, true);  -- next value will be 1001
