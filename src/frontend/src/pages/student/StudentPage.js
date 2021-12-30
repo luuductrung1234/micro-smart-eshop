@@ -1,6 +1,6 @@
 import "./StudentPage.css";
 import { useEffect, useState } from "react";
-import { getAllStudents } from "./client";
+import { deleteStudent, getAllStudents } from "./client";
 import {
   Button,
   Col,
@@ -15,6 +15,7 @@ import {
   Tag,
   Badge,
   Avatar,
+  Popconfirm,
 } from "antd";
 import {
   DeleteOutlined,
@@ -25,6 +26,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import StudentDrawerForm from "./StudentDrawerForm";
+import { deleteNotification } from "../../shared/Notification";
 
 const { Search } = Input;
 
@@ -84,20 +86,6 @@ const columns = [
     dataIndex: "email",
     key: "email",
   },
-  {
-    title: "Action",
-    key: "action",
-    render: (text, student) => (
-      <Space size="middle">
-        <a>
-          <EditOutlined />
-        </a>
-        <a style={{ color: "red" }}>
-          <DeleteOutlined />
-        </a>
-      </Space>
-    ),
-  },
 ];
 
 const menu = (
@@ -109,7 +97,7 @@ const menu = (
     </Menu.Item>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="#">
-        Action 2
+        Action Two
       </a>
     </Menu.Item>
   </Menu>
@@ -135,16 +123,68 @@ const Loading = () => (
 function StudentPage({ setBreadcrumbList }) {
   // React Component state
   const [students, setStudents] = useState([]);
+  const [studentToEdit, setStudentToEdit] = useState(null);
   const [fetching, setFetching] = useState(true);
   const [showDrawer, setShowDrawer] = useState(false);
+
+  const onInit = () => {
+    columns.push({
+      title: "Action",
+      key: "action",
+      render: (text, student) => (
+        <Space size="middle">
+          <a
+            onClick={() => {
+              setStudentToEdit(student);
+              setShowDrawer(true);
+            }}
+          >
+            <EditOutlined style={{ fontSize: 20 }} />
+          </a>
+          <Popconfirm
+            placement="topRight"
+            title={
+              <span>
+                do you want to <strong>delete</strong> this student?
+              </span>
+            }
+            onConfirm={() => onDeleteConfirm(student)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <a style={{ color: "red" }}>
+              <DeleteOutlined style={{ fontSize: 20 }} />
+            </a>
+          </Popconfirm>
+        </Space>
+      ),
+    });
+  };
+
+  const onReload = (searchText) => {
+    getAllStudents(searchText).then((data) => {
+      setStudents(data);
+      setFetching(false);
+    });
+  };
+
+  const onDeleteConfirm = (student) =>
+    deleteStudent(student).then(() => {
+      deleteNotification(
+        "Student deleted",
+        <span>
+          deleted student id: <strong>{student.id}</strong> name:{" "}
+          <strong>{student.name}</strong> from system
+        </span>
+      );
+      onReload();
+    });
 
   // fetching data once the React Component is loaded
   useEffect(() => {
     setBreadcrumbList(["User", "Students"]);
-    getAllStudents().then((data) => {
-      setStudents(data);
-      setFetching(false);
-    });
+    onInit();
+    onReload();
   }, []);
 
   const DropdownMenu = () => (
@@ -170,9 +210,7 @@ function StudentPage({ setBreadcrumbList }) {
           key="1"
           placeholder="input search text"
           allowClear
-          onSearch={(value, event) => {
-            getAllStudents(value).then((data) => setStudents(data));
-          }}
+          onSearch={(value, event) => onReload(value)}
           style={{ width: 250 }}
           enterButton
         />,
@@ -216,7 +254,9 @@ function StudentPage({ setBreadcrumbList }) {
       <StudentDrawerForm
         showDrawer={showDrawer}
         setShowDrawer={setShowDrawer}
-        fetchStudents={() => getAllStudents().then((data) => setStudents(data))}
+        studentToEdit={studentToEdit}
+        setStudentToEdit={setStudentToEdit}
+        fetchStudents={() => onReload()}
       />
       <div
         className="site-layout-background"

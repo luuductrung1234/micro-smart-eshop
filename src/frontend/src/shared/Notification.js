@@ -2,6 +2,7 @@ import { notification } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
+  DeleteOutlined,
   InfoCircleOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
@@ -18,6 +19,14 @@ export const successNotification = (message, description) =>
     message,
     description,
     <CheckCircleOutlined style={{ color: "#237804" }} />
+  );
+
+export const deleteNotification = (message, description) =>
+  openNotificationWithIcon(
+    "success",
+    message,
+    description,
+    <DeleteOutlined style={{ color: "#595959" }} />
   );
 
 export const errorNotification = (message, description) =>

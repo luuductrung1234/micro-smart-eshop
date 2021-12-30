@@ -25,4 +25,25 @@ public class StudentService {
     public Student add(Student student) {
         return studentRepository.save(student);
     }
+
+    public Optional<Long> delete(long id) {
+        var studentToDeleteOptional = studentRepository.findById(id);
+        if(!studentToDeleteOptional.isPresent())
+            return Optional.empty();
+
+        studentRepository.deleteById(id);
+        return Optional.of(id);
+    }
+
+    public Optional<Student> update(long id, Student student) {
+        var studentToUpdateOptional = studentRepository.findById(id);
+        if(!studentToUpdateOptional.isPresent())
+            return studentToUpdateOptional;
+
+        var studentToUpdate = studentToUpdateOptional.get();
+        studentToUpdate.setName(student.getName());
+        studentToUpdate.setEmail(student.getEmail());
+        studentToUpdate.setGender(student.getGender());
+        return Optional.of(studentRepository.save(studentToUpdate));
+    }
 }

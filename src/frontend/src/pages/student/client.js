@@ -32,3 +32,22 @@ export const addNewStudent = (student) =>
     method: "POST",
     body: JSON.stringify(student),
   }).then(checkStatus);
+
+export const updateStudent = (student) =>
+  fetch(`api/v1/students/${student.id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify(student),
+  }).then(checkStatus);
+
+export const deleteStudent = (student) =>
+  fetch(`api/v1/students/${student.id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    method: "DELETE",
+  }).then(checkStatus);
