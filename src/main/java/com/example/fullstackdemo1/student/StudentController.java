@@ -21,16 +21,34 @@ public class StudentController {
     }
 
     @GetMapping("{studentId}")
-    public ResponseEntity<Student> getStudentById(@PathVariable("studentId") long studentId) {
-        return studentService.getById(studentId)
+    public ResponseEntity<Student> getStudentById(@PathVariable("studentId") String studentId) {
+        return studentService.getById(Long.parseLong(studentId))
                 .map(student -> ResponseEntity.ok().body(student))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public Student addStudent(@RequestBody Student student) {
-        var savedStudent =  studentService.add(student);
+        var savedStudent = studentService.add(student);
         log.info("Created Student Id:" + savedStudent.getId());
         return savedStudent;
+    }
+
+    @PutMapping("{studentId}")
+    public ResponseEntity<Student> updateStudent(@PathVariable("studentId") String studentId, @RequestBody Student student) {
+        var response = studentService.update(Long.parseLong(studentId), student)
+                .map(updatedStudent -> ResponseEntity.ok().body(updatedStudent))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+        log.info("Updated Student Id:" + studentId);
+        return response;
+    }
+
+    @DeleteMapping("{studentId}")
+    public ResponseEntity<Long> deleteStudent(@PathVariable("studentId") String studentId) {
+        var response = studentService.delete(Long.parseLong(studentId))
+                .map(deletedStudentId -> ResponseEntity.ok().body(deletedStudentId))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+        log.info("Deleted Student Id:" + studentId);
+        return response;
     }
 }
