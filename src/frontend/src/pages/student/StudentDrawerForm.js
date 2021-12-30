@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Drawer, Input, Col, Select, Form, Row, Button, Spin } from "antd";
-import { addNewStudent } from "./client";
+import { addNewStudent, updateStudent } from "./client";
 import { LoadingOutlined } from "@ant-design/icons";
 import {
   errorNotification,
@@ -11,20 +11,95 @@ const { Option } = Select;
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
-function StudentDrawerForm({ showDrawer, setShowDrawer, fetchStudents }) {
-  const onCLose = () => setShowDrawer(false);
-
+function StudentDrawerForm({
+  showDrawer,
+  setShowDrawer,
+  studentToEdit,
+  setStudentToEdit,
+  fetchStudents,
+}) {
   const [submitting, setSubmitting] = useState(false);
+  const [formState, setFormState] = useState([]);
+
+  const onVisibleChange = () => {
+    if (!showDrawer || !studentToEdit) return;
+    setFormState([
+      {
+        name: ["id"],
+        value: studentToEdit.id,
+      },
+      {
+        name: ["name"],
+        value: studentToEdit.name,
+      },
+      {
+        name: ["email"],
+        value: studentToEdit.email,
+      },
+      {
+        name: ["gender"],
+        value: studentToEdit.gender,
+      },
+    ]);
+  };
+
+  const onClear = () => {
+    setFormState([
+      {
+        name: ["id"],
+        value: null,
+      },
+      {
+        name: ["name"],
+        value: null,
+      },
+      {
+        name: ["email"],
+        value: null,
+      },
+      {
+        name: ["gender"],
+        value: null,
+      },
+    ]);
+  };
+
+  const onCLose = () => {
+    setStudentToEdit(null);
+    onClear();
+    setShowDrawer(false);
+  };
 
   const onFinish = (student) => {
     setSubmitting(true);
     console.log(JSON.stringify(student, null, 2));
+    if (studentToEdit) {
+      updateStudent(student)
+        .then(() => {
+          console.log("student updated");
+          onCLose();
+          successNotification(
+            "Student updated",
+            <span>
+              <strong>{student.name}</strong> was updated on the system
+            </span>
+          );
+          fetchStudents();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setSubmitting(false);
+        });
+      return;
+    }
     addNewStudent(student)
       .then(() => {
         console.log("student added");
         onCLose();
         successNotification(
-          "Student successfully added",
+          "Student added",
           <span>
             <strong>{student.name}</strong> was added to the system
           </span>
@@ -59,6 +134,7 @@ function StudentDrawerForm({ showDrawer, setShowDrawer, fetchStudents }) {
       width={720}
       onClose={onCLose}
       visible={showDrawer}
+      afterVisibleChange={onVisibleChange}
       bodyStyle={{ paddingBottom: 80 }}
       footer={
         <div
@@ -74,12 +150,19 @@ function StudentDrawerForm({ showDrawer, setShowDrawer, fetchStudents }) {
     >
       <Form
         layout="vertical"
+        fields={formState}
+        onFieldsChange={(_, allFields) => {
+          setFormState(allFields);
+        }}
         onFinishFailed={onFinishFailed}
         onFinish={onFinish}
         hideRequiredMark
       >
         <Row gutter={16}>
           <Col span={12}>
+            <Form.Item name="id" label="Id" hidden={true}>
+              <Input />
+            </Form.Item>
             <Form.Item
               name="name"
               label="Name"
