@@ -52,3 +52,10 @@ export const warningNotification = (message, description) =>
     description,
     <WarningOutlined style={{ color: "#ad6800" }} />
   );
+
+export const requestErrorNotification = (err) => {
+  err.response.json().then((res) => {
+    console.error(res);
+    errorNotification("There was an issue", res.message);
+  });
+};

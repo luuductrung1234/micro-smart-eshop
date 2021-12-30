@@ -26,7 +26,11 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import StudentDrawerForm from "./StudentDrawerForm";
-import { deleteNotification } from "../../shared/Notification";
+import {
+  deleteNotification,
+  errorNotification,
+  requestErrorNotification,
+} from "../../shared/Notification";
 
 const { Search } = Input;
 
@@ -161,24 +165,27 @@ function StudentPage({ setBreadcrumbList }) {
     });
   };
 
-  const onReload = (searchText) => {
-    getAllStudents(searchText).then((data) => {
-      setStudents(data);
-      setFetching(false);
-    });
-  };
+  const onReload = (searchText) =>
+    getAllStudents(searchText)
+      .then((data) => {
+        setStudents(data);
+      })
+      .catch(requestErrorNotification)
+      .finally(() => setFetching(false));
 
   const onDeleteConfirm = (student) =>
-    deleteStudent(student).then(() => {
-      deleteNotification(
-        "Student deleted",
-        <span>
-          deleted student id: <strong>{student.id}</strong> name:{" "}
-          <strong>{student.name}</strong> from system
-        </span>
-      );
-      onReload();
-    });
+    deleteStudent(student)
+      .then(() => {
+        deleteNotification(
+          "Student deleted",
+          <span>
+            deleted student id: <strong>{student.id}</strong> name:{" "}
+            <strong>{student.name}</strong> from system
+          </span>
+        );
+        onReload();
+      })
+      .catch(requestErrorNotification);
 
   // fetching data once the React Component is loaded
   useEffect(() => {
