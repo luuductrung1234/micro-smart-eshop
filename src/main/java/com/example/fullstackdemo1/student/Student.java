@@ -4,6 +4,9 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @ToString
@@ -23,9 +26,15 @@ public class Student {
             generator = "student_sequence",
             strategy = GenerationType.SEQUENCE)
     private Long id;
+    @NotBlank
+    @Column(nullable = false)
     private String name;
+    @Email
+    @Column(unique = true)
     private String email;
+    @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Gender gender;
 
     public Student(String name, String email, Gender gender) {

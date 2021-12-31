@@ -1,5 +1,7 @@
 package com.example.fullstackdemo1.student;
 
+import com.example.fullstackdemo1.seedwork.BadRequestException;
+import com.example.fullstackdemo1.student.exception.StudentNotFoundException;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -23,13 +25,17 @@ public class StudentService {
     }
 
     public Student add(Student student) {
+        var isExitedEmail = studentRepository.selectExistsEmail(student.getEmail());
+        if(isExitedEmail){
+            throw new BadRequestException("Email " + student.getEmail() + " taken");
+        }
         return studentRepository.save(student);
     }
 
     public Optional<Long> delete(long id) {
         var studentToDeleteOptional = studentRepository.findById(id);
         if(!studentToDeleteOptional.isPresent())
-            return Optional.empty();
+            throw new StudentNotFoundException("Student with id " + id + " does not exists");
 
         studentRepository.deleteById(id);
         return Optional.of(id);
@@ -38,7 +44,7 @@ public class StudentService {
     public Optional<Student> update(long id, Student student) {
         var studentToUpdateOptional = studentRepository.findById(id);
         if(!studentToUpdateOptional.isPresent())
-            return studentToUpdateOptional;
+            throw new StudentNotFoundException("Student with id " + id + " does not exists");
 
         var studentToUpdate = studentToUpdateOptional.get();
         studentToUpdate.setName(student.getName());

@@ -4,6 +4,7 @@ import { addNewStudent, updateStudent } from "./client";
 import { LoadingOutlined } from "@ant-design/icons";
 import {
   errorNotification,
+  requestErrorNotification,
   successNotification,
 } from "../../shared/Notification";
 
@@ -86,9 +87,7 @@ function StudentDrawerForm({
           );
           fetchStudents();
         })
-        .catch((err) => {
-          console.log(err);
-        })
+        .catch(requestErrorNotification)
         .finally(() => {
           setSubmitting(false);
         });
@@ -106,9 +105,7 @@ function StudentDrawerForm({
         );
         fetchStudents();
       })
-      .catch((err) => {
-        console.log(err);
-      })
+      .catch(requestErrorNotification)
       .finally(() => {
         setSubmitting(false);
       });
@@ -120,6 +117,7 @@ function StudentDrawerForm({
     let errorFieldNames = errorInfo.errorFields
       .map((errorField) => errorField.name[0])
       .join(", ");
+
     errorNotification(
       "Invalid Information",
       <span>

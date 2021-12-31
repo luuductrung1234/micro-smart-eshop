@@ -5,7 +5,6 @@ import {
   Button,
   Col,
   Dropdown,
-  Empty,
   Input,
   Menu,
   PageHeader,
@@ -26,7 +25,10 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import StudentDrawerForm from "./StudentDrawerForm";
-import { deleteNotification } from "../../shared/Notification";
+import {
+  deleteNotification,
+  requestErrorNotification,
+} from "../../shared/Notification";
 
 const { Search } = Input;
 
@@ -90,15 +92,23 @@ const columns = [
 
 const menu = (
   <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="#">
+    <Menu.Item key="actionOne">
+      <button
+        className="custom-button"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         Action One
-      </a>
+      </button>
     </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="#">
+    <Menu.Item key="actionTwo">
+      <button
+        className="custom-button"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         Action Two
-      </a>
+      </button>
     </Menu.Item>
   </Menu>
 );
@@ -133,14 +143,15 @@ function StudentPage({ setBreadcrumbList }) {
       key: "action",
       render: (text, student) => (
         <Space size="middle">
-          <a
+          <button
+            className="custom-button"
             onClick={() => {
               setStudentToEdit(student);
               setShowDrawer(true);
             }}
           >
             <EditOutlined style={{ fontSize: 20 }} />
-          </a>
+          </button>
           <Popconfirm
             placement="topRight"
             title={
@@ -152,33 +163,36 @@ function StudentPage({ setBreadcrumbList }) {
             okText="Yes"
             cancelText="No"
           >
-            <a style={{ color: "red" }}>
+            <button className="custom-button" style={{ color: "red" }}>
               <DeleteOutlined style={{ fontSize: 20 }} />
-            </a>
+            </button>
           </Popconfirm>
         </Space>
       ),
     });
   };
 
-  const onReload = (searchText) => {
-    getAllStudents(searchText).then((data) => {
-      setStudents(data);
-      setFetching(false);
-    });
-  };
+  const onReload = (searchText) =>
+    getAllStudents(searchText)
+      .then((data) => {
+        setStudents(data);
+      })
+      .catch(requestErrorNotification)
+      .finally(() => setFetching(false));
 
   const onDeleteConfirm = (student) =>
-    deleteStudent(student).then(() => {
-      deleteNotification(
-        "Student deleted",
-        <span>
-          deleted student id: <strong>{student.id}</strong> name:{" "}
-          <strong>{student.name}</strong> from system
-        </span>
-      );
-      onReload();
-    });
+    deleteStudent(student)
+      .then(() => {
+        deleteNotification(
+          "Student deleted",
+          <span>
+            deleted student id: <strong>{student.id}</strong> name:{" "}
+            <strong>{student.name}</strong> from system
+          </span>
+        );
+        onReload();
+      })
+      .catch(requestErrorNotification);
 
   // fetching data once the React Component is loaded
   useEffect(() => {
@@ -232,9 +246,6 @@ function StudentPage({ setBreadcrumbList }) {
     if (fetching) {
       return <Loading />;
     }
-    if (students.length === 0) {
-      return <Empty />;
-    }
     return (
       <Table
         dataSource={students}
@@ -245,6 +256,7 @@ function StudentPage({ setBreadcrumbList }) {
         scroll={{ y: 300 }}
         title={() => <TableHeader />}
         footer={() => "Summary:"}
+        size="small"
       />
     );
   };
