@@ -28,7 +28,6 @@ import {
 import StudentDrawerForm from "./StudentDrawerForm";
 import {
   deleteNotification,
-  errorNotification,
   requestErrorNotification,
 } from "../../shared/Notification";
 
@@ -238,9 +237,6 @@ function StudentPage({ setBreadcrumbList }) {
     console.log("render students");
     if (fetching) {
       return <Loading />;
-    }
-    if (students.length === 0) {
-      return <Empty />;
     }
     return (
       <Table

@@ -1,5 +1,6 @@
 import { notification } from "antd";
 import {
+  AntCloudOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
   DeleteOutlined,
@@ -54,8 +55,24 @@ export const warningNotification = (message, description) =>
   );
 
 export const requestErrorNotification = (err) => {
-  err.response.json().then((res) => {
-    console.error(res);
-    errorNotification("There was an issue", res.message);
-  });
+  err.response
+    .json()
+    .then((res) => {
+      console.error(res);
+      openNotificationWithIcon(
+        "error",
+        "There was an issue!",
+        res.message,
+        <AntCloudOutlined style={{ color: "#a8071a" }} />
+      );
+    })
+    .catch((res) => {
+      console.error(res);
+      openNotificationWithIcon(
+        "error",
+        "Something went wrong!",
+        "Server can not be reached...",
+        <AntCloudOutlined style={{ color: "#a8071a" }} />
+      );
+    });
 };
