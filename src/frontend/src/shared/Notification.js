@@ -59,12 +59,18 @@ export const requestErrorNotification = (err) => {
     .json()
     .then((res) => {
       console.error(res);
-      openNotificationWithIcon(
-        "error",
-        "There was an issue!",
-        res.message,
-        <AntCloudOutlined style={{ color: "#a8071a" }} />
-      );
+      if (res.errors) {
+        var message = res.errors.map((error) => {
+          return (
+            <li>
+              <strong>{error.field}</strong> {error.defaultMessage}
+            </li>
+          );
+        });
+        errorNotification("Invalid Information", <ul>{message}</ul>);
+        return;
+      }
+      errorNotification("There was an issue!", res.message);
     })
     .catch((res) => {
       console.error(res);
