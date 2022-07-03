@@ -48,7 +48,7 @@ const columns = [
     title: "",
     dataIndex: "avatar",
     key: "avatar",
-    render: (text, student) => <CustomAvatar name={student.name} />,
+    render: (_, student) => <CustomAvatar name={student.name} />,
   },
   {
     title: "Id",
@@ -64,7 +64,7 @@ const columns = [
     title: "Gender",
     dataIndex: "gender",
     key: "gender",
-    render: (text, student) => {
+    render: (_, student) => {
       let color;
       switch (student.gender) {
         case "FEMALE":
@@ -141,7 +141,7 @@ function StudentPage({ setBreadcrumbList }) {
     columns.push({
       title: "Action",
       key: "action",
-      render: (text, student) => (
+      render: (_, student) => (
         <Space size="middle">
           <button
             className="custom-button"
@@ -199,6 +199,7 @@ function StudentPage({ setBreadcrumbList }) {
     setBreadcrumbList(["User", "Students"]);
     onInit();
     onReload();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const DropdownMenu = () => (
@@ -224,7 +225,7 @@ function StudentPage({ setBreadcrumbList }) {
           key="1"
           placeholder="input search text"
           allowClear
-          onSearch={(value, event) => onReload(value)}
+          onSearch={(value, _) => onReload(value)}
           style={{ width: 250 }}
           enterButton
         />,

@@ -11,9 +11,6 @@ import {
 const openNotificationWithIcon = (type, message, description, icon) =>
   notification[type]({ message, description, icon });
 
-const openNotificationWithoutIcon = (type, message, description) =>
-  notification[type]({ message, description });
-
 export const successNotification = (message, description) =>
   openNotificationWithIcon(
     "success",

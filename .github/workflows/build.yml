@@ -18,14 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mariadb:
-        image: mariadb:${{ env.DB_VERSION }}
+        image: mariadb:10.8
         env:
+          MARIADB_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
           MARIADB_DATABASE: ${{ env.DB_DB }}
           MARIADB_USER: ${{ env.DB_USER }}
           MARIADB_PASSWORD: ${{ env.DB_PASSWORD }}
         ports:
           - 3306:3306
-        options: mysqladmin ping -h 127.0.0.1 -u ${{ env.DB_USER }} --password=${{ env.DB_PASSWORD }}
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
