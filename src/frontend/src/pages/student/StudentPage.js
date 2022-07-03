@@ -199,7 +199,7 @@ function StudentPage({ setBreadcrumbList }) {
     setBreadcrumbList(["User", "Students"]);
     onInit();
     onReload();
-  }, []);
+  }, [onInit, setBreadcrumbList]);
 
   const DropdownMenu = () => (
     <Dropdown key="more" overlay={menu}>
