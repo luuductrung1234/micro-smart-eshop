@@ -4,9 +4,9 @@ server:
     include-binding-errors: always
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/demodb
-    username: root
-    password: P@ssword1
+    url: jdbc:mariadb://sample-host.com:3306/demodb
+    username: sa
+    password: _
   jpa:
     defer-datasource-initialization: true
     show-sql: true
