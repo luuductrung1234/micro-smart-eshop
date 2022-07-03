@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mariadb:
-        image: mariadb:${{ env.DB_VERSION }}
+        image: mariadb:10.8
         env:
           MARIADB_DATABASE: ${{ env.DB_DB }}
           MARIADB_USER: ${{ env.DB_USER }}
