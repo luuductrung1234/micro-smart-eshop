@@ -14,6 +14,7 @@ env:
   # Java
   JAVA_VERSION: 11
   # Pipeline
+  REPO_NAME: AmazingEnergy/full-stack-demo-01
   PIPELINE_COMPOSE_FILE: pipeline/docker-compose.yml
   DOCKER_IMAGE: luuductrung1234/fullstack-demo
   # DockerHub
@@ -99,6 +100,7 @@ jobs:
           echo -e "==========================================\n"
           git config user.name luuductrung1234
           git config user.email luuductrung1234@gmail.com
+          git remote set-url --push origin https://your_username:${{secrets.PAT}}@github.com/${{env.REPO_NAME}}
           git add ${{env.PIPELINE_COMPOSE_FILE}}
           git commit -m "new app version: ${BUILD_NUMBER}"
           git push
