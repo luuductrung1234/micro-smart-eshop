@@ -43,6 +43,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
     outputs:
       build-number: ${{ steps.build-number.outputs.BUILD_NUMBER }}
+      is-code-changed: ${{ steps.verify-changed-code.outputs.files_changed == 'true' }}
     steps:
       - name: Notify with Slack
         uses: 8398a7/action-slack@v3
@@ -103,7 +104,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Update docker-compose.yaml
+      - name: Update app version docker-compose.yaml
+        if: ${{ needs.build.outputs.is-code-changed }}
         run: |
           BUILD_NUMBER=${{needs.build.outputs.build-number}}
           echo -e "=========================================="
@@ -112,6 +114,19 @@ jobs:
           echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
           sed -i -E 's_(${{env.DOCKER_IMAGE}}:)([^"]*)_\1'${BUILD_NUMBER}'_' ${{env.PIPELINE_COMPOSE_FILE}}
           echo -e ""
+          echo -e "=========================================="
+          echo -e "After Changes"
+          echo -e "=========================================="
+          echo -e ""
+          echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
+
+      - name: Replace secrets docker-compose.yaml
+        run: |
+          BUILD_NUMBER=${{needs.build.outputs.build-number}}
+          echo -e "=========================================="
+          echo -e "Before Changes"
+          echo -e "=========================================="
+          echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
           sed -i -E 's#_demo-db-url_#${{secrets.APP_DEMO_DB_URL}}#g' ${{env.PIPELINE_COMPOSE_FILE}}
           sed -i -E 's#_demo-db-username_#${{secrets.APP_DEMO_DB_USERNAME}}#g' ${{env.PIPELINE_COMPOSE_FILE}}
           sed -i -E 's#_demo-db-password_#${{secrets.APP_DEMO_DB_PASSWORD}}#g' ${{env.PIPELINE_COMPOSE_FILE}}
@@ -121,12 +136,6 @@ jobs:
           echo -e "=========================================="
           echo -e ""
           echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
-#          git config user.name luuductrung1234
-#          git config user.email luuductrung1234@gmail.com
-#          git remote set-url --push origin https://your_username:${{secrets.PAT}}@github.com/${{env.REPO_NAME}}
-#          git add ${{env.PIPELINE_COMPOSE_FILE}}
-#          git commit -m "new app version: ${BUILD_NUMBER}"
-#          git push
 
       - name: Notify with Slack
         uses: 8398a7/action-slack@v3
