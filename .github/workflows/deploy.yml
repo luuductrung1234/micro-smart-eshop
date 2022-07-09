@@ -85,11 +85,20 @@ jobs:
       - name: Update and commit app version in docker-compose.yaml
         run: |
           BUILD_NUMBER=${{steps.build-number.outputs.BUILD_NUMBER}}
+          echo -e "==========================================\n"
+          echo -e "Before Changes \n"
+          echo -e "==========================================\n"
           echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
           sed -i -E 's_(${{env.DOCKER_IMAGE}}:)([^"]*)_\1'${BUILD_NUMBER}'_' ${{env.PIPELINE_COMPOSE_FILE}}
+          echo -e "\n==========================================\n"
+          echo -e "After Changes\n"
+          echo -e "==========================================\n"
           echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          echo -e "\n==========================================\n"
+          echo -e "Push Changes\n"
+          echo -e "==========================================\n"
+          git config user.name luuductrung1234
+          git config user.email luuductrung1234@gmail.com
           git add ${{env.PIPELINE_COMPOSE_FILE}}
           git commit -m "new app version: ${BUILD_NUMBER}"
           git push
@@ -125,7 +134,16 @@ jobs:
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          text: ':cry: :x: something went wrong! please check!'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
           text: ':tada: :arrow_right: ${{env.EB_DEPLOYED_URL}}'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
+        if: success()
