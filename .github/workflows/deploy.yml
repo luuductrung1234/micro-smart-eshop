@@ -100,6 +100,12 @@ jobs:
           echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
           sed -i -E 's_(${{env.DOCKER_IMAGE}}:)([^"]*)_\1'${BUILD_NUMBER}'_' ${{env.PIPELINE_COMPOSE_FILE}}
           echo -e ""
+          sed -i -E 's_(SPRING_DATASOURCE_URL: )([^"]*)_\1'${{secrets.APP_DEMO_DB_URL}}'_' ${{env.PIPELINE_COMPOSE_FILE}}
+          echo -e ""
+          sed -i -E 's_(SPRING_DATASOURCE_USERNAME: )([^"]*)_\1'${{secrets.APP_DEMO_DB_USERNAME}}'_' ${{env.PIPELINE_COMPOSE_FILE}}
+          echo -e ""
+          sed -i -E 's_(SPRING_DATASOURCE_PASSWORD: )([^"]*)_\1'${{secrets.APP_DEMO_DB_PASSWORD}}'_' ${{env.PIPELINE_COMPOSE_FILE}}
+          echo -e ""
           echo -e "=========================================="
           echo -e "After Changes"
           echo -e "=========================================="
