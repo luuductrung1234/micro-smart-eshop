@@ -106,20 +106,16 @@ jobs:
       - name: Update docker-compose.yaml
         run: |
           BUILD_NUMBER=${{needs.build.outputs.build-number}}
-          DB_URL='aaa'
-          DB_USERNAME='aaa'
-          DB_PASSWORD='aaa'
+          DB_URL='${{secrets.APP_DEMO_DB_URL}}'
+          DB_USERNAME=${{secrets.APP_DEMO_DB_USERNAME}}
+          DB_PASSWORD=${{secrets.APP_DEMO_DB_PASSWORD}}
           echo -e "=========================================="
           echo -e "Before Changes"
           echo -e "=========================================="
           echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
           sed -i -E 's_(${{env.DOCKER_IMAGE}}:)([^"]*)_\1'${BUILD_NUMBER}'_' ${{env.PIPELINE_COMPOSE_FILE}}
           echo -e ""
-          sed -i -E 's_(SPRING_DATASOURCE_URL: )([^"]*)_\1'${DB_URL}'_' ${{env.PIPELINE_COMPOSE_FILE}}
-          echo -e ""
-          sed -i -E 's_(SPRING_DATASOURCE_USERNAME: )([^"]*)_\1'${DB_USERNAME}'_' ${{env.PIPELINE_COMPOSE_FILE}}
-          echo -e ""
-          sed -i -E 's_(SPRING_DATASOURCE_PASSWORD: )([^"]*)_\1'${DB_PASSWORD}'_' ${{env.PIPELINE_COMPOSE_FILE}}
+          sed -i -E 's/${demo-db-url}/${DB_URL}/g' ${{env.PIPELINE_COMPOSE_FILE}}
           echo -e ""
           echo -e "=========================================="
           echo -e "After Changes"
