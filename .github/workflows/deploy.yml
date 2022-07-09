@@ -43,7 +43,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
     outputs:
       build-number: ${{ steps.build-number.outputs.BUILD_NUMBER }}
-      is-code-changed: ${{ steps.verify-changed-code.outputs.files_changed == 'true' }}
+      is-code-changed: ${{ steps.verify-changed-code.outputs.files_changed }}
     steps:
       - name: Notify with Slack
         uses: 8398a7/action-slack@v3
@@ -105,7 +105,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Update app version docker-compose.yaml
-        if: ${{ needs.build.outputs.is-code-changed }}
+        if: ${{ needs.build.outputs.is-code-changed == 'true' }}
         run: |
           BUILD_NUMBER=${{needs.build.outputs.build-number}}
           echo -e "=========================================="
