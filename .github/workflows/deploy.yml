@@ -44,7 +44,8 @@ jobs:
     outputs:
       build-number: ${{ steps.build-number.outputs.BUILD_NUMBER }}
     steps:
-      - uses: 8398a7/action-slack@v3
+      - name: Notify with Slack
+        uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
@@ -70,14 +71,25 @@ jobs:
           username: ${{ env.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
+      - name: Verify Code Changed
+        uses: tj-actions/verify-changed-files@v10
+        id: verify-changed-code
+        with:
+          files: |
+            **/pom.xml
+            src
+
       - name: Maven Clean Package and Push to Dockerhub
+        if: steps.verify-changed-code.outputs.files_changed == 'true'
         run: |
           ./mvnw --no-transfer-progress clean package \
             -P build-frontend \
             -P push-to-registry \
               -Dimage.tag=${{steps.build-number.outputs.BUILD_NUMBER}}
 
-      - uses: 8398a7/action-slack@v3
+      - name: Notify with Slack
+        uses: 8398a7/action-slack@v3
+        if: steps.verify-changed-code.outputs.files_changed == 'true'
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
@@ -121,7 +133,8 @@ jobs:
 #          git commit -m "new app version: ${BUILD_NUMBER}"
 #          git push
 
-      - uses: 8398a7/action-slack@v3
+      - name: Notify with Slack
+        uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
@@ -151,7 +164,8 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: failure()
 
-      - uses: 8398a7/action-slack@v3
+      - name: Notify with Slack
+        uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
