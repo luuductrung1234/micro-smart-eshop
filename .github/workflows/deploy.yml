@@ -106,9 +106,9 @@ jobs:
       - name: Update docker-compose.yaml
         run: |
           BUILD_NUMBER=${{needs.build.outputs.build-number}}
-          DB_URL='${{secrets.APP_DEMO_DB_URL}}'
-          DB_USERNAME=${{secrets.APP_DEMO_DB_USERNAME}}
-          DB_PASSWORD=${{secrets.APP_DEMO_DB_PASSWORD}}
+          DB_URL='aaa'
+          DB_USERNAME='aaa'
+          DB_PASSWORD='aaa'
           echo -e "=========================================="
           echo -e "Before Changes"
           echo -e "=========================================="
