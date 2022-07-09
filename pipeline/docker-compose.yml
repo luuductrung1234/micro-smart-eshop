@@ -10,6 +10,9 @@ services:
     restart: "always"
     environment:
       SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: ${demo-db-url}
+      SPRING_DATASOURCE_USERNAME: ${demo-db-username}
+      SPRING_DATASOURCE_PASSWORD: ${demo-db-password}
     ports:
       - "80:8080"
 
