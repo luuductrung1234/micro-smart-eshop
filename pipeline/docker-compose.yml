@@ -10,9 +10,9 @@ services:
     restart: "always"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:postgresql://aa1mtfyoes8te1j.czsbcq3ka6kq.ap-southeast-1.rds.amazonaws.com:5432/demodb
-      SPRING_DATASOURCE_USERNAME: sa
-      SPRING_DATASOURCE_PASSWORD: kFAhaRGLamf]mP7v
+      SPRING_DATASOURCE_URL: _demo-db-url_
+      SPRING_DATASOURCE_USERNAME: _demo-db-username_
+      SPRING_DATASOURCE_PASSWORD: _demo-db-password_
     ports:
       - "80:8080"
 
