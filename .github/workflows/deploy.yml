@@ -28,7 +28,7 @@ env:
   EB_DEPLOYED_URL: http://fullstackdemo-env.eba-37nkzcf2.ap-southeast-1.elasticbeanstalk.com
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     services:
       mariadb:
@@ -41,6 +41,8 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
+    outputs:
+      build-number: ${{ steps.build-number.outputs.BUILD_NUMBER }}
     steps:
       - uses: 8398a7/action-slack@v3
         with:
@@ -83,27 +85,36 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      - name: Update and commit app version in docker-compose.yaml
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: Update app version in docker-compose.yaml
         run: |
-          BUILD_NUMBER=${{steps.build-number.outputs.BUILD_NUMBER}}
-          echo -e "==========================================\n"
-          echo -e "Before Changes \n"
-          echo -e "==========================================\n"
+          BUILD_NUMBER=${{needs.build.outputs.build-number}}
+          echo -e "=========================================="
+          echo -e "Before Changes"
+          echo -e "=========================================="
           echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
           sed -i -E 's_(${{env.DOCKER_IMAGE}}:)([^"]*)_\1'${BUILD_NUMBER}'_' ${{env.PIPELINE_COMPOSE_FILE}}
-          echo -e "\n==========================================\n"
-          echo -e "After Changes\n"
-          echo -e "==========================================\n"
+          sed -i -E 's/${demo-db-url}/${{secrets.APP_DEMO_DB_URL}}/g' docker-compose.yml
+          sed -i -E 's/${demo-db-username}/${{secrets.APP_DEMO_DB_USERNAME}}/g' docker-compose.yml
+          sed -i -E 's/${demo-db-password}/${{secrets.APP_DEMO_DB_PASSWORD}}/g' docker-compose.yml
+          echo -e ""
+          echo -e "=========================================="
+          echo -e "After Changes"
+          echo -e "=========================================="
           echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
-          echo -e "\n==========================================\n"
-          echo -e "Push Changes\n"
-          echo -e "==========================================\n"
-          git config user.name luuductrung1234
-          git config user.email luuductrung1234@gmail.com
-          git remote set-url --push origin https://your_username:${{secrets.PAT}}@github.com/${{env.REPO_NAME}}
-          git add ${{env.PIPELINE_COMPOSE_FILE}}
-          git commit -m "new app version: ${BUILD_NUMBER}"
-          git push
+          echo -e ""
+          echo -e "=========================================="
+          echo -e "Push Changes"
+          echo -e "=========================================="
+#          git config user.name luuductrung1234
+#          git config user.email luuductrung1234@gmail.com
+#          git remote set-url --push origin https://your_username:${{secrets.PAT}}@github.com/${{env.REPO_NAME}}
+#          git add ${{env.PIPELINE_COMPOSE_FILE}}
+#          git commit -m "new app version: ${BUILD_NUMBER}"
+#          git push
 
       - name: Upload modified docker-compose file
         uses: actions/upload-artifact@v3
@@ -128,8 +139,8 @@ jobs:
           environment_name: ${{ env.EB_ENVIRONMENT_NAME }}
           application_name: ${{ env.EB_APPLICATION_NAME }}
           deployment_package: ${{ env.EB_DEPLOYMENT_PACKAGE }}
-          version_label: ${{ steps.build-number.outputs.BUILD_NUMBER }}
-          version_description: Version ${{steps.build-number.outputs.BUILD_NUMBER}} deployed via github actions ${{ github.sha }}
+          version_label: ${{ needs.build.outputs.build-number }}
+          version_description: Version ${{ needs.build.outputs.build-number }} deployed via github actions ${{ github.sha }}
           wait_for_deployment: 60
 
       - uses: 8398a7/action-slack@v3
