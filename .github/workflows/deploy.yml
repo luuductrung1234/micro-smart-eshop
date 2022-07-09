@@ -89,7 +89,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build ]
     steps:
-      - name: Update app version in docker-compose.yaml
+      - uses: actions/checkout@v3
+
+      - name: Update docker-compose.yaml
         run: |
           BUILD_NUMBER=${{needs.build.outputs.build-number}}
           echo -e "=========================================="
@@ -115,12 +117,6 @@ jobs:
 #          git add ${{env.PIPELINE_COMPOSE_FILE}}
 #          git commit -m "new app version: ${BUILD_NUMBER}"
 #          git push
-
-      - name: Upload modified docker-compose file
-        uses: actions/upload-artifact@v3
-        with:
-          name: modified-docker-compose
-          path: ${{env.PIPELINE_COMPOSE_FILE}}
 
       - uses: 8398a7/action-slack@v3
         with:
