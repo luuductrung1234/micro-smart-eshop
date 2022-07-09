@@ -115,7 +115,7 @@ jobs:
           echo -e "Current ${{env.PIPELINE_COMPOSE_FILE}}\n$(cat ${{env.PIPELINE_COMPOSE_FILE}})"
           sed -i -E 's_(${{env.DOCKER_IMAGE}}:)([^"]*)_\1'${BUILD_NUMBER}'_' ${{env.PIPELINE_COMPOSE_FILE}}
           echo -e ""
-          sed -i -E 's/${demo-db-url}/${DB_URL}/g' ${{env.PIPELINE_COMPOSE_FILE}}
+          sed -i -E 's/_demo-db-url_/${{secrets.APP_DEMO_DB_URL}}/g' ${{env.PIPELINE_COMPOSE_FILE}}
           echo -e ""
           echo -e "=========================================="
           echo -e "After Changes"
