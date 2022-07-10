@@ -56,9 +56,9 @@ jobs:
             src/**/*.json
 
       - name: List All Changed Files
-        if: steps.changed-files.outputs.files_changed == 'true'
+        if: steps.verify-changed-code.outputs.files_changed == 'true'
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+          for file in ${{ steps.verify-changed-code.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
 

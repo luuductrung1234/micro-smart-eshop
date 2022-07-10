@@ -32,12 +32,12 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mariadb:
-        image: mariadb:10.8
+        image: mysql:8.0.29
         env:
-          MARIADB_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
-          MARIADB_DATABASE: ${{ env.DB_DB }}
-          MARIADB_USER: ${{ env.DB_USER }}
-          MARIADB_PASSWORD: ${{ env.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
+          MYSQL_DATABASE: ${{ env.DB_DB }}
+          MYSQL_USER: ${{ env.DB_USER }}
+          MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
@@ -80,11 +80,18 @@ jobs:
             **/pom.xml
             src
             src/**
+            src/**/*.sql
+            src/**/*.yml
+            src/**/*.java
+            src/**/*.js
+            src/**/*.html
+            src/**/*.css
+            src/**/*.json
 
       - name: List All Changed Files
-        if: steps.changed-files.outputs.files_changed == 'true'
+        if: steps.verify-changed-code.outputs.files_changed == 'true'
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+          for file in ${{ steps.verify-changed-code.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
 
