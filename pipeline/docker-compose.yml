@@ -16,13 +16,15 @@ services:
     ports:
       - "80:8080"
 
-#  mariadb:
-#    image: mariadb
-#    container_name: demo-mariadb
-#    restart: "always"
+#  mysqldb:
+#    platform: linux/x86_64
+#    image: mysql
+#    container_name: demo-mysql
+#    command: --default-authentication-plugin=mysql_native_password
+#    restart: "no"
 #    environment:
-#      - MARIADB_ROOT_PASSWORD=P@ssword1
+#      - MYSQL_ROOT_PASSWORD=P@ssword1
 #    ports:
-#      - 3306:3306
+#      - "3306:3306"
 #    volumes:
 #      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
