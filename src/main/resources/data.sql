@@ -999,4 +999,5 @@ insert into student (id, name, email, gender) values (998, 'Lora Janik', 'ljanik
 insert into student (id, name, email, gender) values (999, 'Courtney Farrington', 'cfarringtonrq@vimeo.com', 'FEMALE');
 insert into student (id, name, email, gender) values (1000, 'Delmore Blindermann', 'dblindermannrr@booking.com', 'MALE');
 
+-- incompatible with mysql
 -- SELECT setval(student_sequence, 1000);  -- next value will be 1001
