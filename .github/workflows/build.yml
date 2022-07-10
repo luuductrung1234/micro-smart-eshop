@@ -45,6 +45,13 @@ jobs:
             **/pom.xml
             src
             src/**
+            src/**/*.sql
+            src/**/*.yml
+            src/**/*.java
+            src/**/*.js
+            src/**/*.html
+            src/**/*.css
+            src/**/*.json
 
       - name: List All Changed Files
         if: steps.changed-files.outputs.files_changed == 'true'
