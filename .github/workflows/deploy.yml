@@ -43,7 +43,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
     outputs:
       build-number: ${{ steps.build-number.outputs.BUILD_NUMBER }}
-      is-code-changed: ${{ steps.verify-changed-code.outputs.files_changed }}
+      is-code-changed: ${{ steps.verify-changed-code.outputs.any_changed }}
     steps:
       - name: Notify with Slack
         uses: 8398a7/action-slack@v3
@@ -73,8 +73,8 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Verify Code Changed
-        uses: tj-actions/verify-changed-files@v10
         id: verify-changed-code
+        uses: tj-actions/changed-files@v23.1
         with:
           files: |
             **/pom.xml
@@ -89,14 +89,14 @@ jobs:
             src/**/*.json
 
       - name: List All Changed Files
-        if: steps.verify-changed-code.outputs.files_changed == 'true'
+        if: steps.verify-changed-code.outputs.any_changed == 'true'
         run: |
           for file in ${{ steps.verify-changed-code.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
 
       - name: Maven Clean Package and Push to Dockerhub
-        if: steps.verify-changed-code.outputs.files_changed == 'true'
+        if: steps.verify-changed-code.outputs.any_changed == 'true'
         run: |
           ./mvnw --no-transfer-progress clean package \
             -P build-frontend \
@@ -105,7 +105,7 @@ jobs:
 
       - name: Notify with Slack
         uses: 8398a7/action-slack@v3
-        if: steps.verify-changed-code.outputs.files_changed == 'true'
+        if: steps.verify-changed-code.outputs.any_changed == 'true'
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
