@@ -18,13 +18,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     services:
-      mariadb:
-        image: mariadb:10.8
+      mysqldb:
+        image: mysql:8.0.29
         env:
-          MARIADB_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
-          MARIADB_DATABASE: ${{ env.DB_DB }}
-          MARIADB_USER: ${{ env.DB_USER }}
-          MARIADB_PASSWORD: ${{ env.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
+          MYSQL_DATABASE: ${{ env.DB_DB }}
+          MYSQL_USER: ${{ env.DB_USER }}
+          MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
@@ -37,7 +37,24 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ env.JAVA_VERSION }}
 
+      - name: Verify Code Changed
+        uses: tj-actions/verify-changed-files@v10
+        id: verify-changed-code
+        with:
+          files: |
+            **/pom.xml
+            src
+            src/**
+
+      - name: List All Changed Files
+        if: steps.changed-files.outputs.files_changed == 'true'
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+
       - name: Maven Clean Package
+        if: steps.verify-changed-code.outputs.files_changed == 'true'
         run: |
           ./mvnw --no-transfer-progress clean package -P build-frontend -l build-output.log
 
