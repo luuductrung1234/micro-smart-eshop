@@ -79,6 +79,14 @@ jobs:
           files: |
             **/pom.xml
             src
+            src/**
+
+      - name: List All Changed Files
+        if: steps.changed-files.outputs.files_changed == 'true'
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
 
       - name: Maven Clean Package and Push to Dockerhub
         if: steps.verify-changed-code.outputs.files_changed == 'true'
