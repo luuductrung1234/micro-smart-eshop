@@ -6,7 +6,7 @@ version: "3.8"
 
 services:
   backend:
-    image: "luuductrung1234/fullstack-demo:latest"
+    image: "luuductrung1234/micro-smart-eshop:latest"
     restart: "always"
     environment:
       SPRING_PROFILES_ACTIVE: dev
