@@ -1,5 +1,6 @@
 package com.example.eshop.user;
 
+import com.example.eshop.ticket.Ticket;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -7,7 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @ToString
 @Getter
@@ -45,6 +48,9 @@ public class User {
     private Role role;
     @Column(nullable = false)
     private String location;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Ticket> tickets = new HashSet<>();
 
     public User(String name, String email, String password, Gender gender, Role role, String location) {
         this.name = name;
