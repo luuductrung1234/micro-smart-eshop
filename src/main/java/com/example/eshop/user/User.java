@@ -1,4 +1,4 @@
-package com.example.fullstackdemo1.student;
+package com.example.eshop.user;
 
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -16,14 +16,14 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table
-public class Student {
+public class User {
     @Id
     @SequenceGenerator(
-            name = "student_sequence",
-            sequenceName = "student_sequence",
+            name = "user_sequence",
+            sequenceName = "user_sequence",
             allocationSize = 1)
     @GeneratedValue(
-            generator = "student_sequence",
+            generator = "user_sequence",
             strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotBlank
@@ -32,23 +32,35 @@ public class Student {
     @Email
     @Column(unique = true)
     private String email;
+    @NotBlank
+    @Column(nullable = false)
+    private String password;
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Gender gender;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+    @Column(nullable = false)
+    private String location;
 
-    public Student(String name, String email, Gender gender) {
+    public User(String name, String email, String password, Gender gender, Role role, String location) {
         this.name = name;
         this.email = email;
+        this.password = password;
         this.gender = gender;
+        this.role = role;
+        this.location = location;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Student student = (Student) o;
-        return id != null && Objects.equals(id, student.id);
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
     }
 
     @Override

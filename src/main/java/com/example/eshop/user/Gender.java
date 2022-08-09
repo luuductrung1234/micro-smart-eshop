@@ -1,4 +1,4 @@
-package com.example.fullstackdemo1.student;
+package com.example.eshop.user;
 
 public enum Gender {
     MALE,

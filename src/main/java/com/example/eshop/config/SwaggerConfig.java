@@ -1,4 +1,4 @@
-package com.example.fullstackdemo1.config;
+package com.example.eshop.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,9 +28,9 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Full-Stack Demo API")
+        return new ApiInfoBuilder().title("Micro-Smart Eshop API")
                 .description("API reference for developers")
-                .termsOfServiceUrl("https://github.com/AmazingEnergy/full-stack-demo-01")
+                .termsOfServiceUrl("https://github.com/luuductrung1234/micro-smart-eshop")
                 .contact(new Contact("thomas", "https://github.com/luuductrung1234", "luuductrung1234@gmail.com"))
                 .license("MIT License")
                 .licenseUrl("https://github.com/AmazingEnergy/full-stack-demo-01/blob/main/LICENSE")

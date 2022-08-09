@@ -1,4 +1,4 @@
-package com.example.fullstackdemo1.config;
+package com.example.eshop.config;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

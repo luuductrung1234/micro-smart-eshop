@@ -14,18 +14,18 @@ env:
   # Java
   JAVA_VERSION: 11
   # Pipeline
-  REPO_NAME: AmazingEnergy/full-stack-demo-01
+  REPO_NAME: luuductrung1234/micro-smart-eshop
   PIPELINE_COMPOSE_FILE: pipeline/docker-compose.yml
-  DOCKER_IMAGE: luuductrung1234/fullstack-demo
+  DOCKER_IMAGE: luuductrung1234/micro-smart-eshop
   # DockerHub
   DOCKER_HUB_USERNAME: luuductrung1234
-  DOCKER_HUB_REPO_URL: https://hub.docker.com/repository/docker/luuductrung1234/fullstack-demo
+  DOCKER_HUB_REPO_URL: https://hub.docker.com/repository/docker/luuductrung1234/micro-smart-eshop
   # AWS & Elastic Bean Stalk
   AWS_REGION: ap-southeast-1
-  EB_ENVIRONMENT_NAME: Fullstackdemo-env
-  EB_APPLICATION_NAME: fullstack-demo
+  EB_ENVIRONMENT_NAME: Microsmartdemo-env
+  EB_APPLICATION_NAME: micro-smart-demo
   EB_DEPLOYMENT_PACKAGE: pipeline/docker-compose.yml
-  EB_DEPLOYED_URL: http://fullstackdemo-env.eba-37nkzcf2.ap-southeast-1.elasticbeanstalk.com
+  EB_DEPLOYED_URL: http://microsmartdemo-env.eba-nudppsiw.ap-southeast-1.elasticbeanstalk.com/
 
 jobs:
   build:
