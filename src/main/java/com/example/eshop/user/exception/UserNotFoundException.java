@@ -1,11 +1,11 @@
-package com.example.fullstackdemo1.student.exception;
+package com.example.eshop.user.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class StudentNotFoundException extends RuntimeException {
-    public StudentNotFoundException(String msg) {
+public class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException(String msg) {
         super(msg);
     }
 }
