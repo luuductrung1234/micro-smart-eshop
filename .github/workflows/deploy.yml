@@ -80,6 +80,8 @@ jobs:
         with:
           files: |
             **/pom.xml
+            pipeline
+            pipeline/**
             src
             src/**
             src/**/*.sql
