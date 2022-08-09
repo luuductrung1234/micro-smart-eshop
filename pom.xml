@@ -23,7 +23,7 @@
         <target.npm.version>7.24.0</target.npm.version>
 
         <image.registry.account.id>docker.io/luuductrung1234</image.registry.account.id>
-        <image.name>fullstack-demo</image.name>
+        <image.name>fullstack-demo</image.name>  <!-- this property will be imputed later in commandline -D -->
         <image.tag/> <!-- this property will be imputed later in commandline -D -->
         <image.dependency.jdk>adoptopenjdk:11-jre@sha256:ad6431b2e2a6f8016aa6d79c3f588783af9fdc06cafe131fd0d3faf560914b13</image.dependency.jdk>
 
