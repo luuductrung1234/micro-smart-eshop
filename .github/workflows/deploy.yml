@@ -105,6 +105,7 @@ jobs:
           ./mvnw --no-transfer-progress clean package \
             -P build-frontend \
             -P push-to-registry \
+              -Dimage.name==${{env.DOCKER_IMAGE}} \
               -Dimage.tag=${{steps.build-number.outputs.BUILD_NUMBER}}
 
       - name: Notify with Slack
