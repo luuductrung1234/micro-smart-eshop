@@ -1,6 +1,7 @@
 package com.example.eshop.ticket;
 
 import com.example.eshop.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -28,6 +29,7 @@ public class Ticket {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "UserId", nullable = false)
+    @JsonBackReference
     private User user;
     @NotNull
     @Column(nullable = false)

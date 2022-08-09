@@ -1,6 +1,7 @@
 package com.example.eshop.user;
 
 import com.example.eshop.ticket.Ticket;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -50,6 +51,8 @@ public class User {
     private String location;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(nullable = true)
+    @JsonManagedReference
     private Set<Ticket> tickets = new HashSet<>();
 
     public User(String name, String email, String password, Gender gender, Role role, String location) {
