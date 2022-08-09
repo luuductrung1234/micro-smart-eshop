@@ -1,5 +1,6 @@
-# full-stack-demo (v01)
-[[course](https://amigoscode.com/courses/full-stack-spring-boot-react/)]
+# micro-smart-eshop
+
+want to call an API(s)? check [[swagger](http://microsmartdemo-env.eba-nudppsiw.ap-southeast-1.elasticbeanstalk.com/swagger-ui/index.html)]
 
 ## Maven Profiles
 

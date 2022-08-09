@@ -26,19 +26,22 @@ public class Ticket {
             generator = "ticket_sequence",
             strategy = GenerationType.SEQUENCE)
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "UserId", nullable = false)
     private User user;
-
     @NotNull
     @Column(nullable = false)
     private BigDecimal amount;
-
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TicketStatus status;
+    @Column(nullable = false)
+    private String location;
 
     public Ticket(User user, BigDecimal amount, TicketStatus status){
         this.user = user;
+        this.location = user.getLocation();
         this.amount = amount;
         this.status = status;
     }
