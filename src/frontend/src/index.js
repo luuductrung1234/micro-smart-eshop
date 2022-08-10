@@ -3,11 +3,15 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { AuthContextProvider } from "./context/auth-context";
+import { NavContextProvider } from "./context/nav-context";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <AuthContextProvider>
+    <NavContextProvider>
+      <App />
+    </NavContextProvider>
+  </AuthContextProvider>,
   document.getElementById("root")
 );
 

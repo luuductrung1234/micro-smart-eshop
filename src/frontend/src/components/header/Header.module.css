@@ -1,0 +1,111 @@
+.navMain {
+  float: left;
+}
+
+.navMain h1 {
+  color: #2f6ee2;
+  padding: 5px 16px;
+  display: inline-block;
+}
+
+.navMain ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.navItem {
+  float: left;
+  text-align: center;
+  padding: 5px 10px;
+}
+
+.navLink:visited,
+.navLink:link {
+  text-decoration: none;
+  color: #2f6ee2;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.navLink:hover,
+.navLink:active {
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.navControl {
+  float: right;
+  padding: 15px 0px;
+}
+
+.navUser {
+  display: inline-block;
+  margin-bottom: 30px;
+}
+
+.navLogout {
+  display: inline-block;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: block;
+}
+
+@media only screen and (max-width: 500px) {
+  .header {
+    width: 50%;
+    margin: 0px auto;
+  }
+
+  .navMain {
+    float: none;
+  }
+
+  .navMain h1 {
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .navItem {
+    float: none;
+  }
+
+  .navControl {
+    float: none;
+    padding: 0px;
+  }
+
+  .navMain h1 {
+    display: block;
+  }
+
+  .navMain ul {
+    display: block;
+  }
+  .navUser {
+    display: block;
+    text-align: center;
+    margin: 0px;
+    padding: 5px;
+  }
+
+  .navLogout {
+    display: block;
+    margin: 0px auto;
+    background-color: #fff;
+    border: 1px #4f005f solid;
+    color: #333;
+    padding: 5px 20px;
+  }
+
+  .navLogout:hover {
+    background-color: #4f005f;
+    border: none;
+    color: #eee;
+  }
+}
