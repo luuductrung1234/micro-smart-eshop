@@ -2,6 +2,8 @@
 
 want to call an API(s)? check [[swagger](http://microsmartdemo-env.eba-nudppsiw.ap-southeast-1.elasticbeanstalk.com/swagger-ui/index.html)]
 
+want to see a demo? check [[ui](http://microsmartdemo-env.eba-nudppsiw.ap-southeast-1.elasticbeanstalk.com/)]
+
 ## Maven Profiles
 
 1. Package project and publish to local daemon
