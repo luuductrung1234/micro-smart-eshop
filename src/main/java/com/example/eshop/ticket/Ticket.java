@@ -1,7 +1,9 @@
 package com.example.eshop.ticket;
 
+import com.example.eshop.product.Product;
 import com.example.eshop.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -31,6 +33,10 @@ public class Ticket {
     @JoinColumn(name = "UserId", nullable = false)
     @JsonBackReference
     private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ProductId", nullable = false)
+    @JsonManagedReference
+    private Product product;
     @NotNull
     @Column(nullable = false)
     private BigDecimal amount;
@@ -41,9 +47,10 @@ public class Ticket {
     @Column(nullable = false)
     private String location;
 
-    public Ticket(User user, BigDecimal amount, TicketStatus status){
+    public Ticket(User user, Product product, BigDecimal amount, TicketStatus status){
         this.user = user;
         this.location = user.getLocation();
+        this.product = product;
         this.amount = amount;
         this.status = status;
     }
