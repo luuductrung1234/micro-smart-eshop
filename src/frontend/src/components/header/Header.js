@@ -12,7 +12,8 @@ function Header() {
   return (
     <header className={`${classes.header} ${classes.clearfix}`}>
       <div className={`${classes.navMain}`}>
-        <h1>EShop</h1>
+        {navContext.currentPage === "house" && <h1>EHouse</h1>}
+        {navContext.currentPage !== "house" && <h1>EShop</h1>}
         <ul>
           {authContext.storedRole === "CUSTOMER" && (
             <li className={classes.navItem}>
@@ -34,6 +35,17 @@ function Header() {
               Tickets
             </a>
           </li>
+          {authContext.storedRole === "CUSTOMER" && (
+            <li className={classes.navItem}>
+              <a
+                className={classes.navLink}
+                href="#0"
+                onClick={navContext.onGoToHouse}
+              >
+                Smart House
+              </a>
+            </li>
+          )}
         </ul>
       </div>
       <div className={`${classes.navControl} ${classes.clearfix}`}>

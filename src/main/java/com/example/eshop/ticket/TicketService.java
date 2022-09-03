@@ -34,7 +34,7 @@ public class TicketService {
 
     public Optional<Long> delete(long id) {
         var ticketToDeleteOptional = ticketRepository.findById(id);
-        if(!ticketToDeleteOptional.isPresent())
+        if(ticketToDeleteOptional.isEmpty())
             throw new TicketNotFoundException("Ticket with id " + id + " does not exists");
 
         ticketRepository.deleteById(id);
@@ -43,7 +43,7 @@ public class TicketService {
 
     public Optional<Ticket> updateStatus(long id, TicketStatus status) {
         var ticketToUpdateOptional = ticketRepository.findById(id);
-        if(!ticketToUpdateOptional.isPresent())
+        if(ticketToUpdateOptional.isEmpty())
             throw new TicketNotFoundException("Ticket with id " + id + " does not exists");
 
         var ticketToUpdate = ticketToUpdateOptional.get();

@@ -49,19 +49,26 @@ public class User {
     private Role role;
     @Column(nullable = false)
     private String location;
+    @Column(nullable = false)
+    private String environment;
+
+    @Column(nullable = false)
+    private String devices;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Column(nullable = true)
     @JsonManagedReference
     private Set<Ticket> tickets = new HashSet<>();
 
-    public User(String name, String email, String password, Gender gender, Role role, String location) {
+    public User(String name, String email, String password, Gender gender, Role role, String location, String environment, String devices) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.gender = gender;
         this.role = role;
         this.location = location;
+        this.environment = environment;
+        this.devices = devices;
     }
 
     @Override

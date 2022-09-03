@@ -37,12 +37,11 @@ const Ticket = () => {
                 className={`${classes.ticket} ${classes.clearfix}`}
               >
                 <div className={classes.ticketId}>
-                  <strong>Id:&nbsp;&nbsp;</strong>
+                  <strong>#&nbsp;&nbsp;</strong>
                   {ticket.id}
                 </div>
                 <div className={classes.ticketAmount}>
-                  <strong>Amount:&nbsp;&nbsp;</strong>
-                  {ticket.amount}
+                  <strong>Amount:&nbsp;&nbsp;</strong>${ticket.amount}
                 </div>
                 <div className={classes.ticketStatus}>
                   <strong>Status:&nbsp;&nbsp;</strong>
@@ -87,8 +86,7 @@ const Ticket = () => {
                   {ticket.id}
                 </div>
                 <div className={classes.ticketAmount}>
-                  <strong>Amount:&nbsp;&nbsp;</strong>
-                  {ticket.amount}
+                  <strong>Amount:&nbsp;&nbsp;</strong>${ticket.amount}
                 </div>
                 <div className={classes.ticketStatus}>
                   <strong>Status:&nbsp;&nbsp;</strong>

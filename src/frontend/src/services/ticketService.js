@@ -20,14 +20,14 @@ export const getTicketByUser = (userId) => {
   }).then(checkStatus);
 };
 
-export const addNewTicket = (userId, amount) =>
+export const addNewTicket = (userId, productId) =>
   fetch(TICKET_API_URL, {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
     method: "POST",
-    body: JSON.stringify({ userId: userId, amount: amount }),
+    body: JSON.stringify({ userId: userId, productId: productId }),
   }).then(checkStatus);
 
 export const updateTicket = (ticketId, status) =>

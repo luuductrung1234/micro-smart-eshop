@@ -2,9 +2,48 @@
   width: 90%;
   max-width: 40rem;
   margin: 0 auto;
-  padding: 2rem;
 }
 
 .actions {
   text-align: center;
+}
+
+.badge {
+  background-color: #eee;
+  color: #777;
+  font-weight: bold;
+  padding: 15px;
+  border-radius: 3px;
+}
+
+.product {
+  background-color: #eee;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  cursor: pointer;
+}
+
+.product:hover {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.productInfo {
+  padding-left: 20px;
+}
+
+.productName {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.productImage {
+  width: 140px;
+}
+
+.productPrice {
+  font-size: 20px;
+  color: #741188;
 }

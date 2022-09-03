@@ -52,4 +52,40 @@ public class UsersController {
         log.info("Deleted User Id:" + userId);
         return response;
     }
+
+    @GetMapping("{userId}/environment/:update")
+    public ResponseEntity<String> UpdateEnvironment(@PathVariable("userId") String userId,
+                                                    @Param("light") Integer light,
+                                                    @Param("temperature") Float temperature,
+                                                    @Param("int") Integer sound) {
+        var response = userService.updateEnvironment(Long.parseLong(userId), light, temperature, sound)
+                .map(updatedUser -> ResponseEntity.ok().body(updatedUser.getEnvironment()))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+        log.info("Updated User Id:" + userId);
+        return response;
+    }
+
+    @GetMapping("{userId}/devices/:update")
+    public ResponseEntity<String> UpdateDevices(@PathVariable("userId") String userId,
+                                                @Param("light") Boolean light) {
+        var response = userService.updateDevices(Long.parseLong(userId), light)
+                .map(updatedUser -> ResponseEntity.ok().body(updatedUser.getDevices()))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+        log.info("Updated User Id:" + userId);
+        return response;
+    }
+
+    @GetMapping("{userId}/devices")
+    public ResponseEntity<String> GetDevices(@PathVariable("userId") String userId) {
+        return userService.getById(Long.parseLong(userId))
+                .map(user -> ResponseEntity.ok().body(user.getDevices()))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("{userId}/environment")
+    public ResponseEntity<String> GetEnvironment(@PathVariable("userId") String userId) {
+        return userService.getById(Long.parseLong(userId))
+                .map(user -> ResponseEntity.ok().body(user.getEnvironment()))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

@@ -1,69 +1,96 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import classes from "./Home.module.css";
 
 import Card from "../../shared/Card";
 import Button from "../../shared/Button";
-import Input from "../../shared/Input";
 import AuthContext from "../../context/auth-context";
 
 import { addNewTicket } from "../../services/ticketService";
+import { getAllProducts, getSuggestion } from "../../services/productService";
 
 const Home = () => {
   const context = useContext(AuthContext);
-  const [enteredAmount, setEnteredAmount] = useState(0);
-  const [amountIsValid, setAmountIsValid] = useState();
-  const [formIsValid, setFormIsValid] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [suggestedProducts, setSuggestedProducts] = useState([]);
 
-  const amountInputRef = useRef();
+  const buyHandler = (product) => {
+    addNewTicket(context.storedUserId, product.id).then(() => {
+      onReload();
+    });
+  };
+
+  const onReload = () => {
+    getAllProducts().then((data) => {
+      setProducts(
+        data.map((product) => {
+          return (
+            <div key={product.id} className={classes.product}>
+              <img
+                className={classes.productImage}
+                src={product.picture}
+                alt="product"
+              />
+              <div className={classes.productInfo}>
+                <p className={classes.productName}>{product.name}</p>
+                <p className={classes.productPrice}>${product.price}</p>
+                <Button
+                  className={classes.btn}
+                  onClick={() => {
+                    buyHandler(product);
+                  }}
+                >
+                  Buy Now
+                </Button>
+              </div>
+            </div>
+          );
+        })
+      );
+    });
+    getSuggestion(context.storedUserId).then((data) => {
+      setSuggestedProducts(
+        data.map((product) => {
+          return (
+            <div key={product.id} className={classes.product}>
+              <img
+                className={classes.productImage}
+                src={product.picture}
+                alt="product"
+              />
+              <div className={classes.productInfo}>
+                <p className={classes.productName}>{product.name}</p>
+                <p className={classes.productPrice}>${product.price}</p>
+                <Button
+                  className={classes.btn}
+                  onClick={() => {
+                    buyHandler(product);
+                  }}
+                >
+                  Buy Now
+                </Button>
+              </div>
+            </div>
+          );
+        })
+      );
+    });
+  };
 
   useEffect(() => {
-    const identifier = setTimeout(() => {
-      console.log("Checking form validity!");
-      setFormIsValid(!isNaN(enteredAmount) && enteredAmount > 0);
-    }, 500);
-    return () => {
-      console.log("CLEANUP");
-      clearTimeout(identifier);
-    };
-  }, [enteredAmount]);
-
-  const amountChangeHandler = (event) => {
-    setEnteredAmount(event.target.value);
-  };
-
-  const validateAmountHandler = () => {
-    setAmountIsValid(!isNaN(enteredAmount) && enteredAmount > 0);
-  };
-
-  const submitHandler = (event) => {
-    event.preventDefault();
-    if (formIsValid) {
-      addNewTicket(parseInt(context.storedUserId), enteredAmount);
-      setEnteredAmount(0);
-    } else if (!amountIsValid) amountInputRef.current.focus();
-  };
+    onReload();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Card className={classes.home}>
-      <h3>Create new ticket</h3>
-      <form onSubmit={submitHandler}>
-        <Input
-          ref={amountInputRef}
-          type="number"
-          id="amount"
-          label="Amount"
-          value={enteredAmount}
-          isValid={amountIsValid}
-          onChange={amountChangeHandler}
-          onBlur={validateAmountHandler}
-        />
-        <div className={classes.actions}>
-          <Button type="submit" className={classes.btn}>
-            Submit
-          </Button>
-        </div>
-      </form>
+      <h2>Suggestion</h2>
+      {suggestedProducts.length === 0 && (
+        <p className={classes.badge}>no suggested products</p>
+      )}
+      {suggestedProducts}
+      <h2>Our Products</h2>
+      {products}
     </Card>
   );
 };

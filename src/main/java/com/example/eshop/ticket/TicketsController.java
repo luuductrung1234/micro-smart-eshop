@@ -1,5 +1,6 @@
 package com.example.eshop.ticket;
 
+import com.example.eshop.product.ProductService;
 import com.example.eshop.ticket.model.CreateTicketModel;
 import com.example.eshop.ticket.model.UpdateTicketModel;
 import com.example.eshop.user.UserService;
@@ -19,6 +20,7 @@ import java.util.List;
 public class TicketsController {
     private final TicketService ticketService;
     private final UserService userService;
+    private final ProductService productService;
 
     @GetMapping
     public List<Ticket> getAllTickets() {
@@ -65,7 +67,10 @@ public class TicketsController {
         var user = userService.getById(ticketModel.userId);
         if (user.isEmpty()) return ResponseEntity.notFound().build();
 
-        var ticket = new Ticket(user.get(), ticketModel.amount, TicketStatus.CREATED);
+        var product = productService.getById(ticketModel.productId);
+        if (product.isEmpty()) return ResponseEntity.notFound().build();
+
+        var ticket = new Ticket(user.get(), product.get(), product.get().getPrice(), TicketStatus.CREATED);
         var savedTicket = ticketService.add(ticket);
         log.info("Created Ticket Id:" + savedTicket.getId());
         return ResponseEntity.ok(savedTicket);
