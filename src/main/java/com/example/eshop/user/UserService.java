@@ -34,7 +34,7 @@ public class UserService {
 
     public Optional<Long> delete(long id) {
         var userToDeleteOptional = userRepository.findById(id);
-        if(!userToDeleteOptional.isPresent())
+        if(userToDeleteOptional.isEmpty())
             throw new UserNotFoundException("User with id " + id + " does not exists");
 
         userRepository.deleteById(id);
@@ -43,13 +43,33 @@ public class UserService {
 
     public Optional<User> update(long id, User user) {
         var userToUpdateOptional = userRepository.findById(id);
-        if(!userToUpdateOptional.isPresent())
+        if(userToUpdateOptional.isEmpty())
             throw new UserNotFoundException("User with id " + id + " does not exists");
 
         var userToUpdate = userToUpdateOptional.get();
         userToUpdate.setName(user.getName());
         userToUpdate.setEmail(user.getEmail());
         userToUpdate.setGender(user.getGender());
+        return Optional.of(userRepository.save(userToUpdate));
+    }
+
+    public Optional<User> updateEnvironment(long id, int light, float temperature, int sound) {
+        var userToUpdateOptional = userRepository.findById(id);
+        if(userToUpdateOptional.isEmpty())
+            throw new UserNotFoundException("User with id " + id + " does not exists");
+
+        var userToUpdate = userToUpdateOptional.get();
+        userToUpdate.setEnvironment("light:" + light + ";temperature:" + temperature + ";sound:" + sound);
+        return Optional.of(userRepository.save(userToUpdate));
+    }
+
+    public Optional<User> updateDevices(long id, boolean light) {
+        var userToUpdateOptional = userRepository.findById(id);
+        if(userToUpdateOptional.isEmpty())
+            throw new UserNotFoundException("User with id " + id + " does not exists");
+
+        var userToUpdate = userToUpdateOptional.get();
+        userToUpdate.setDevices("light:" + light);
         return Optional.of(userRepository.save(userToUpdate));
     }
 }
