@@ -8,7 +8,7 @@ const NavContext = React.createContext({
   onGoToTickets: () => {
     /* TODO need to implement */
   },
-  onGoToProfile: () => {
+  onGoToHouse: () => {
     /* TODO need to implement */
   },
 });
@@ -30,8 +30,8 @@ export const NavContextProvider = (props) => {
     setCurrentPage("tickets");
   };
 
-  const goToProfileHandler = () => {
-    setCurrentPage("profile");
+  const goToHouseHandler = () => {
+    setCurrentPage("house");
   };
 
   const goToHomeHandler = () => {
@@ -44,7 +44,7 @@ export const NavContextProvider = (props) => {
         currentPage: currentPage,
         onGoToHome: goToHomeHandler,
         onGoToTickets: goToTicketsHandler,
-        onGoToProfile: goToProfileHandler,
+        onGoToHouse: goToHouseHandler,
       }}
     >
       {props.children}

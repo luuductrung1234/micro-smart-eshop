@@ -1,7 +1,7 @@
 package com.example.eshop.product;
 
 import com.example.eshop.ticket.Ticket;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -46,9 +46,9 @@ public class Product {
     @Column(nullable = false)
     private String category;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Column(nullable = true)
-    @JsonBackReference
     private Set<Ticket> tickets = new HashSet<>();
 
     public Product(String name, BigDecimal price, String picture, String category) {

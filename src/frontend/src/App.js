@@ -9,6 +9,7 @@ import "./App.css";
 
 import AuthContext from "./context/auth-context";
 import NavContext from "./context/nav-context";
+import House from "./components/house/House";
 
 function App() {
   const authContext = useContext(AuthContext);
@@ -28,6 +29,9 @@ function App() {
         {authContext.isLoggedIn && navContext.currentPage === "tickets" && (
           <Ticket />
         )}
+        {authContext.isLoggedIn &&
+          navContext.currentPage === "house" &&
+          authContext.storedRole !== "ADMIN" && <House />}
       </main>
     </div>
   );

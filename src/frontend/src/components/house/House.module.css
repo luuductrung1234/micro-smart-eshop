@@ -1,0 +1,26 @@
+.house {
+  padding: 0px 20px;
+}
+
+.device,
+.sensor {
+  display: flex;
+  width: 60%;
+  margin: 0px auto;
+}
+
+.deviceName,
+.sensorName {
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.deviceBtn {
+  margin-left: 25px;
+}
+
+.sensorValue {
+  font-size: 20px;
+  margin-left: 25px;
+}

@@ -15,6 +15,36 @@ export const getAllUsers = (searchText) => {
   }).then(checkStatus);
 };
 
+export const getDevices = (userId) => {
+  return fetch(`${USER_API_URL}/${userId}/devices`, {
+    headers: {
+      Accept: "application/json",
+    },
+    method: "GET",
+  }).then(checkStatus);
+};
+
+export const updateDevices = (userId, deviceName, value) => {
+  return fetch(
+    `${USER_API_URL}/${userId}/devices/:update?${deviceName}=${value}`,
+    {
+      headers: {
+        Accept: "application/json",
+      },
+      method: "GET",
+    }
+  ).then(checkStatus);
+};
+
+export const getEnvironment = (userId) => {
+  return fetch(`${USER_API_URL}/${userId}/environment`, {
+    headers: {
+      Accept: "application/json",
+    },
+    method: "GET",
+  }).then(checkStatus);
+};
+
 export const addNewUser = (user) =>
   fetch(USER_API_URL, {
     headers: {
@@ -46,10 +76,20 @@ export const deleteUser = (user) =>
 
 const checkStatus = (response) => {
   if (response.ok) {
-    return response.json();
+    return tryParseJson(response);
   }
   // convert non-2xx HTTP responses into errors:
   const error = new Error(response.statusText);
   error.response = response;
   return Promise.reject(error);
 };
+
+function tryParseJson(response) {
+  let responseText = response.text();
+  try {
+    JSON.parse(responseText);
+  } catch (e) {
+    return responseText;
+  }
+  return response.json();
+}
