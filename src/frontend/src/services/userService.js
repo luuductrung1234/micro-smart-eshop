@@ -21,7 +21,7 @@ export const getDevices = (userId) => {
       Accept: "application/json",
     },
     method: "GET",
-  }).then(checkStatus);
+  }).then(checkStatusV2);
 };
 
 export const updateDevices = (userId, deviceName, value) => {
@@ -33,7 +33,7 @@ export const updateDevices = (userId, deviceName, value) => {
       },
       method: "GET",
     }
-  ).then(checkStatus);
+  ).then(checkStatusV2);
 };
 
 export const getEnvironment = (userId) => {
@@ -42,7 +42,7 @@ export const getEnvironment = (userId) => {
       Accept: "application/json",
     },
     method: "GET",
-  }).then(checkStatus);
+  }).then(checkStatusV2);
 };
 
 export const addNewUser = (user) =>
@@ -75,6 +75,16 @@ export const deleteUser = (user) =>
   }).then(checkStatus);
 
 const checkStatus = (response) => {
+  if (response.ok) {
+    return response.json();
+  }
+  // convert non-2xx HTTP responses into errors:
+  const error = new Error(response.statusText);
+  error.response = response;
+  return Promise.reject(error);
+};
+
+const checkStatusV2 = (response) => {
   if (response.ok) {
     return tryParseJson(response);
   }
