@@ -37,15 +37,20 @@ const Ticket = () => {
                 className={`${classes.ticket} ${classes.clearfix}`}
               >
                 <div className={classes.ticketId}>
-                  <strong>#&nbsp;&nbsp;</strong>
-                  {ticket.id}
+                  <strong className={classes.ticketLabel}>#&nbsp;&nbsp;</strong>
+                  <span className={classes.ticketValue}>{ticket.id}</span>
                 </div>
                 <div className={classes.ticketAmount}>
-                  <strong>Amount:&nbsp;&nbsp;</strong>${ticket.amount}
+                  <strong className={classes.ticketLabel}>
+                    Amount:&nbsp;&nbsp;
+                  </strong>
+                  <span className={classes.ticketValue}>${ticket.amount}</span>
                 </div>
                 <div className={classes.ticketStatus}>
-                  <strong>Status:&nbsp;&nbsp;</strong>
-                  {ticket.status}
+                  <strong className={classes.ticketLabel}>
+                    Status:&nbsp;&nbsp;
+                  </strong>
+                  <span className={classes.ticketValue}>{ticket.status}</span>
                 </div>
                 {ticket.status === "CREATED" && (
                   <button
@@ -59,7 +64,7 @@ const Ticket = () => {
                 )}
                 {ticket.status === "PROCESSING" && (
                   <button
-                    className={classes.ticketBtn}
+                    className={`${classes.ticketBtn} ${classes.bgGreen}`}
                     onClick={() => {
                       completeTicketHandler(ticket);
                     }}
@@ -82,15 +87,22 @@ const Ticket = () => {
                 className={`${classes.ticket} ${classes.clearfix}`}
               >
                 <div className={classes.ticketId}>
-                  <strong>Id:&nbsp;&nbsp;</strong>
-                  {ticket.id}
+                  <strong className={classes.ticketLabel}>
+                    Id:&nbsp;&nbsp;
+                  </strong>
+                  <span className={classes.ticketValue}>{ticket.id}</span>
                 </div>
                 <div className={classes.ticketAmount}>
-                  <strong>Amount:&nbsp;&nbsp;</strong>${ticket.amount}
+                  <strong className={classes.ticketLabel}>
+                    Amount:&nbsp;&nbsp;
+                  </strong>
+                  <span className={classes.ticketValue}>${ticket.amount}</span>
                 </div>
                 <div className={classes.ticketStatus}>
-                  <strong>Status:&nbsp;&nbsp;</strong>
-                  {ticket.status}
+                  <strong className={classes.ticketLabel}>
+                    Status:&nbsp;&nbsp;
+                  </strong>
+                  <span className={classes.ticketValue}>{ticket.status}</span>
                 </div>
               </div>
             );
